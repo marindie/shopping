@@ -21,7 +21,18 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.shopping.main" />
+	<!-- 
+	<beans:bean class=org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<beans:property name="targetClass" value="org.springframework.util.Log4jConfigurer"/>
+		<beans:property name="targetMethod" value="initLogging"/>
+		<beans:property name="arguments"/>
+			<list>
+				<value>/</value>
+			</list>
+	</beans:bean>
+	 -->
+	 
+	<context:component-scan base-package="com.shopping" />
 	
 	
 	

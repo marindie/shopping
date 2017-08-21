@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.shopping.main">
+	<logger name="com.shopping">
 		<level value="info" />
 	</logger>
 	
@@ -30,6 +30,17 @@
 
 	<logger name="org.springframework.web">
 		<level value="info" />
+	</logger>
+	
+	<!-- Query Loggers -->
+	<logger name="jdbc.sqlonly" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="console-infolog"/>
+	</logger>
+	
+	<logger name="jdbc.resultsettable" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="console"/>
 	</logger>
 
 	<!-- Root Logger -->
