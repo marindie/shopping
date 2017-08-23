@@ -86,5 +86,12 @@ public class MainController {
 		
 		return "/sample/test";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/test/ajaxPostFormSample")
+	public String ajaxPostFormSample(@RequestBody String xml) {
+		logger.info(xml);
+		return "Success";
+	}
 
 }
