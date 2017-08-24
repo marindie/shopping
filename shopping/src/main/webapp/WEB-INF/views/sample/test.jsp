@@ -29,21 +29,23 @@ $(document).ready(function(){
 		xmlDoc = $.parseXML(xml),
 		$xml = $(xmlDoc);
 		
-		var regex="/[?&]([^#])=()/g",
-		data = $("#xmlForm").serilize(),
+		var regex=/[?&]([^=#]+)=([^&#]*)/g,
+		data = $("#xmlForm").serialize(),
 		params ={},
 		match;
 		while(match = regex.exec(data)){
 			params[match[1]] = match[2];
+			$xml.find("root").append(match[1]);
+			$xml.find(match[1]).text(match[2]);
 		}
-		
+		console.log($xml);
 		$.ajax({
 			type : "POST",
-			url : "ajaxXmlSample",
-			data : data,
+			url : "test/ajaxXmlSample",
+			data : params,
 			dataType : "XML",
 			success : function(data){
-				$("#ajaxStringResponse").val(data);
+				$("#ajaxXmlResponse").val(data);
 			}
 		});
 	});	
@@ -56,9 +58,8 @@ $(document).ready(function(){
 	//Simple XML Sample
 	var xml = '<root><sample>This is test</sample></root>', 
 	xmlDoc = $.parseXML(xml),
-	$xml = $(xmlDoc),
-	$sample = $xml.find("sample");
-	alert($sample.text());
+	sample = $(xmlDoc).find("sample").get(0).appendChild("<new>asdf</new>");
+	alert(sample.find("new").get(0));
 	
 	//AjaxFormSerializePostSample
 	$("#ajaxPostFormSample").click(function(){
@@ -110,6 +111,7 @@ this is test
 		<textArea name="textArea1">asdfasdf</textArea>
 		<input type="button" id="ajaxXmlSample" value="ajaxXmlSample"/>
 	</form>
+	<span id="ajaxXmlResponse"></span>
 </div>
 </body>
 </html>

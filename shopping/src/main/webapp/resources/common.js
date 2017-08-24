@@ -1,6 +1,9 @@
 /**
  * 
  */
+(function(){
+	
+})(window);
 Map = function(){
 	this.map = new Object();
 };

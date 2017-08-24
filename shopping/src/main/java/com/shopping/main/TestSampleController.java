@@ -28,14 +28,13 @@ import com.shopping.vo.MainVO;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value ="/test")
 public class TestSampleController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TestSampleController.class);
 	@Autowired
 	private MainService mainService;
 
-	@RequestMapping(value = "/", method = {RequestMethod.POST,RequestMethod.GET})
+	@RequestMapping(value = "/test", method = {RequestMethod.POST,RequestMethod.GET})
 	public String test(Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Test Start");
 		
@@ -43,14 +42,14 @@ public class TestSampleController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/ajaxPostFormSample")
+	@RequestMapping(value = "/test/ajaxPostFormSample")
 	public String ajaxPostFormSample(@RequestBody String xml) {
 		logger.info(xml);
 		return "Success";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/ajaxXmlSample")
+	@RequestMapping(value = "/test/ajaxXmlSample")
 	public String ajaxXmlSample(@RequestBody String xml) {
 		return "Success";
 	}

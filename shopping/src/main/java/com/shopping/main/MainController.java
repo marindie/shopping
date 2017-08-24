@@ -79,19 +79,4 @@ public class MainController {
 		logger.info(data);
 		return "ajax response data";
 	}
-
-	@RequestMapping(value = "/test", method = {RequestMethod.POST,RequestMethod.GET})
-	public String test(Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Test Start");
-		
-		return "/sample/test";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/test/ajaxPostFormSample")
-	public String ajaxPostFormSample(@RequestBody String xml) {
-		logger.info(xml);
-		return "Success";
-	}
-
 }
