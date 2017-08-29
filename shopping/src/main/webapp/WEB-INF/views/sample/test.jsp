@@ -53,13 +53,22 @@ $(document).ready(function(){
 	//Simple Map Sample
 	var map = new Map();
 	map.put("id","tt");
-	map.get("id");
+	alert(map.get("id"));
+	var anotherMap = new Map();
+	anotherMap.put("id","dd");
+	alert(anotherMap.get("id"));
 	
 	//Simple XML Sample
-	var xml = '<root><sample>This is test</sample></root>', 
-	xmlDoc = $.parseXML(xml),
-	sample = $(xmlDoc).find("sample").get(0).appendChild("<new>asdf</new>");
-	alert(sample.find("new").get(0));
+	var xml = '<root></root>';
+	xmlDoc = $.parseXML(xml);
+	var str = xmlDoc.createElement("apple");
+	$(xmlDoc).find("root").append(str);
+	var root = $(xmlDoc).find("root");
+//	$(root).innerHTML("hi");
+//	var xmlString = (new XMLSerializer()).serializeToString(xmlDoc);
+	
+	//sample = $(xmlDoc).find("sample");
+//	alert(xmlString);
 	
 	//AjaxFormSerializePostSample
 	$("#ajaxPostFormSample").click(function(){
