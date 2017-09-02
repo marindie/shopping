@@ -54,4 +54,15 @@ wony.util.module = {};
 			}
 	}
 	
+	serializeToObject = function(formData){
+		var regex = /[?&]([^=#]+)=([^&#]*)/g,
+	    params = new Object(),
+	    match;
+		
+		while(match = regex.exec(formData)) {
+			params.match[1] = match[2];
+		}
+		return params;
+	};
+	
 })(window);

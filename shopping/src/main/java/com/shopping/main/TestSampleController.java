@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.service.MainService;
 import com.shopping.vo.MainVO;
 
@@ -43,15 +44,23 @@ public class TestSampleController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/test/ajaxPostFormSample")
-	public String ajaxPostFormSample(@RequestBody String xml) {
-		logger.info(xml);
-		return "Success";
+	public String ajaxPostFormSample(@RequestBody String formData) {
+		logger.info(formData);
+		return "SuccessForm";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/test/ajaxXmlSample")
 	public String ajaxXmlSample(@RequestBody String xml) {
-		return "Success";
+		logger.info(xml);
+		return "SuccessXml";
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value = "/test/ajaxPostFormJson")
+	public String ajaxJsonSample(@RequestBody String json) {
+		logger.info(json);
+		ObjectMapper mapper = new ObjectMapper();
+		return "SuccessJson";
+	}
 }

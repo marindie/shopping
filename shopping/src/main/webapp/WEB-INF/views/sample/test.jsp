@@ -11,52 +11,13 @@
 <script type="text/javascript" src="<c:url value="/resources/common.js" />"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	//alert("Test Start");
-	//Ajax String Test
-	$("#ajaxStringSample").click(function(){
-		$.ajax({
-			type : "POST",
-			url : "ajaxStringSample",
-			data : "test",
-			success : function(data){
-				$("#ajaxStringResponse").val(data);
-			}
-		});
-	});
-	//Ajax XML Test
-	$("#ajaxXmlSample").click(function(){
-		var xml = "<root></root>",
-		xmlDoc = $.parseXML(xml),
-		$xml = $(xmlDoc);
-		
-		var regex=/[?&]([^=#]+)=([^&#]*)/g,
-		data = $("#xmlForm").serialize(),
-		params ={},
-		match;
-		while(match = regex.exec(data)){
-			params[match[1]] = match[2];
-			$xml.find("root").append(match[1]);
-			$xml.find(match[1]).text(match[2]);
-		}
-		console.log($xml);
-		$.ajax({
-			type : "POST",
-			url : "test/ajaxXmlSample",
-			data : params,
-			dataType : "XML",
-			success : function(data){
-				$("#ajaxXmlResponse").val(data);
-			}
-		});
-	});	
-	
 	//Simple Map Sample
 	var map = new Map();
 	map.put("id","tt");
-	alert(map.get("id"));
+//	alert(map.get("id"));
 	var anotherMap = new Map();
 	anotherMap.put("id","dd");
-	alert(anotherMap.get("id"));
+//	alert(anotherMap.get("id"));
 	
 	//Simple XML Sample
 	var xml = '<root></root>';
@@ -69,6 +30,19 @@ $(document).ready(function(){
 	
 	//sample = $(xmlDoc).find("sample");
 //	alert(xmlString);
+	
+	//alert("Test Start");
+	//Ajax String Test
+	$("#ajaxStringSample").click(function(){
+		$.ajax({
+			type : "POST",
+			url : "ajaxStringSample",
+			data : "test",
+			success : function(data){
+				$("#ajaxStringResponse").val(data);
+			}
+		});
+	});
 	
 	//AjaxFormSerializePostSample
 	$("#ajaxPostFormSample").click(function(){
@@ -86,6 +60,75 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	//Ajax Form XML Test
+	$("#ajaxXmlSample").click(function(){
+		var params = makeXmlData();
+		$.ajax({
+			type : "POST",
+			url : "test/ajaxXmlSample",
+			data : params,
+			//dataType : "xml",
+			contentType : "application/xml",
+			success : function(data){
+				$("#ajaxXmlResponse").text(data);
+			},
+			error : function(error){
+				alert(error);
+			}
+		});
+	});	
+	
+	//Ajax Form Json Test
+	$("#ajaxPostFormJson").click(function(){
+		var data = $("#jsonForm").serialize();
+		var jsonArray = [];
+		
+		for(var i=1; i<=2 ; i++){
+			var jsonObject = new Object();
+			jsonObject.number = i;
+			jsonArray.push(data);
+		}
+		
+		var jsonData = JSON.stringify(jsonArray);
+		alert(jsonData);
+		$.ajax({
+			type : "POST",
+			url : "/main/test/ajaxPostFormJson",
+			cache : false,
+			data : jsonData,
+			contentType : "application/json",
+			success : function(data){
+				$("#ajaxJsonResponse").text(data);
+			},
+			error : function(error){
+				alert(error);
+			}
+		});
+	});
+	
+	makeXmlData = function(data) {
+		var xmlString = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><SYNC_REQUEST></SYNC_REQUEST>';
+		var parser = new DOMParser();
+		var xmlDoc = parser.parseFromString(xmlString, "text/xml"); //important to use "text/xml"
+		var elements = xmlDoc.getElementsByTagName("SYNC_REQUEST");
+
+		var regex = /[?&]([^=#]+)=([^&#]*)/g,
+	    url = $("#xmlForm").serialize(),
+	    params = {},
+	    match;
+		
+		while(match = regex.exec(url)) {
+		    params[match[1]] = match[2];
+		    var node = xmlDoc.createElement(match[1]);
+		    node.innerHTML = match[2];
+		    elements[0].appendChild(node);
+		}
+	var serializer = new XMLSerializer();
+	var xmlString = serializer.serializeToString(xmlDoc);
+	console.log("xml--------->" + xmlString);
+	return xmlString; 
+	}	
 });
 </script>
 <title>Insert title here</title>
@@ -113,6 +156,7 @@ this is test
 	</form>
 	<span>Ajax Sample</span><button id="ajaxStringSample">Send</button><input id="ajaxStringResponse" />
 </div>
+
 <div>
 	<form id="xmlForm" action="" method="post">
 		xmlData1 <input type="text" name="text1" />
@@ -120,7 +164,17 @@ this is test
 		<textArea name="textArea1">asdfasdf</textArea>
 		<input type="button" id="ajaxXmlSample" value="ajaxXmlSample"/>
 	</form>
-	<span id="ajaxXmlResponse"></span>
 </div>
+<span id="ajaxXmlResponse">result</span>
+
+<div>
+	<form id="jsonForm" action="" method="post">
+		jsonData1 <input type="text" name="text1" />
+		jsonData2 <input type="text" name="text2" />
+		<textArea name="textArea1">simpl json data</textArea>
+		<input type="button" id="ajaxPostFormJson" value="ajaxPostFormJson"/>
+	</form>
+</div>
+<span id="ajaxJsonResponse">result</span>
 </body>
 </html>
