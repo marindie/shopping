@@ -81,23 +81,28 @@ $(document).ready(function(){
 	
 	//Ajax Form Json Test
 	$("#ajaxPostFormJson").click(function(){
-		var data = $("#jsonForm").serialize();
-		var jsonArray = [];
 		
-		for(var i=1; i<=2 ; i++){
-			var jsonObject = new Object();
-			jsonObject.number = i;
-			jsonArray.push(data);
+		var regex = /([^=#]+)=([^&#]*)&{0,1}/g,
+	    url = $("#jsonForm").serialize(),
+	    params = {},
+	    match;
+		
+		
+		
+		while(match = regex.exec(url)) {
+			params[match[1]] = match[2];
 		}
-		
-		var jsonData = JSON.stringify(jsonArray);
-		alert(jsonData);
+		var jsonData = JSON.stringify(params);
+		jsonData = jsonData.replace(/%20/g," ");
+		var arrayJson = [];
+		arrayJson[0] = jsonData;
+		alert(arrayJson.toString());
 		$.ajax({
 			type : "POST",
 			url : "/main/test/ajaxPostFormJson",
 			cache : false,
-			data : jsonData,
-			contentType : "application/json",
+			data : arrayJson.toString(),
+			contentType : "application/json;charset=utf-8",
 			success : function(data){
 				$("#ajaxJsonResponse").text(data);
 			},

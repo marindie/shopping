@@ -1,13 +1,21 @@
 package com.shopping.util;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CommonUtil {
 	private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
@@ -79,5 +87,36 @@ public class CommonUtil {
 		logger.info("===============================================================================");
  
 		return paramMaps;
+	}
+	
+	public List<Map<String, Object>> fromJsonToListMap(String jsonData){
+		ObjectMapper mapper = new ObjectMapper();
+		List<Map<String, Object>> data = null;
+		try {
+			data = mapper.readValue(jsonData, new TypeReference<List<Map<String, Object>>>(){});
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return data;
+	}
+	
+	public boolean isEmpty(Object obj) {
+		if(null == obj)
+			return false;
+		else if(obj instanceof String){
+			if("".equals( obj.toString() ) ) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		return true;
 	}
 }
