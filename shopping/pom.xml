@@ -196,6 +196,13 @@
 		    <artifactId>jackson-xml-databind</artifactId>
 		    <version>0.6.2</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-afterburner -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.module</groupId>
+		    <artifactId>jackson-module-afterburner</artifactId>
+		    <version>1.9.4</version>
+		</dependency>
 
 	</dependencies>
     <build>
