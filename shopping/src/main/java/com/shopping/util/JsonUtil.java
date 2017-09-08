@@ -321,6 +321,8 @@ public class JsonUtil {
     //2. writeValueAsString 를 사용해서 String으로 변환시 안에 Array 가 있으면 안됨. 각 내용물을 하나하나 또 변환해서 String으로 처리해야함.
     //3. 이와 같은 이유로 일단 Map 이나 List 로 변환후, 해당 Array 를 추출해서 List<Map<String, Object>> 로 Casting 하는게 편함.
     //4. null 또는 "" 케이스 빼는게 가능하다해서 모쥴 남이 샘플로 만들어 쓰는거 사용해서 처리함.
+    //5. JsonGenerator 로 하나 하나 추가하는 방식도 가능함.
+    //6. Annotation 방식도 존재 하는데 Model 방식으로는 아직 필요해 보이지 않아서 샘플은 없음. (http://tutorials.jenkov.com/java-json/jackson-annotations.html) 참고
 //	public static void main(String[] args) {
 //		String json1 = "{\"menu\": {\r\n" + 
 //				"    \"header\": \"SVG Viewer\",\r\n" + 
