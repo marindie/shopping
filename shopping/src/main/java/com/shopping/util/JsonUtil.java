@@ -264,7 +264,7 @@ public class JsonUtil {
         return listData;
     }
 	
-    //테스트 결과 사용하는데 있어서 제한사항
+    //테스트 결과후 Summary
     //========================== Jackson =================
     //1. String 을 Map 또는 List 로 변환하는것은 무난해 보임.
     //2. writeValueAsString 를 사용해서 String으로 변환시 안에 Array 가 있으면 안됨. 각 내용물을 하나하나 또 변환해서 String으로 처리해야함.
@@ -273,8 +273,10 @@ public class JsonUtil {
     //5. JsonGenerator 로 하나 하나 추가하는 방식도 가능함.
     //6. Annotation 방식도 존재 하는데 Model 방식으로는 아직 필요해 보이지 않아서 샘플은 없음. (http://tutorials.jenkov.com/java-json/jackson-annotations.html) 참고
     //========================== Jackson =================
+    
     //========================== Gson =================
-    //아무문제 없이 List<Map<String, Object>> 및 String 변환이 됨.
+    //특별한 문제 없이 List<Map<String, Object>> 및 String 변환이 됨. Array 인지 Object 인지만 판단하면 되는 정도.
+    //========================== Gson =================
 	public static void main(String[] args) {
 		String json1 = "{\"menu\": {\r\n" + 
 				"    \"header\": \"SVG Viewer\",\r\n" + 
