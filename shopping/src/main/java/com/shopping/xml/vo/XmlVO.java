@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="ROOT")
@@ -18,8 +19,10 @@ public class XmlVO {
 	private String id;
 	@XmlElement(name="EXPAND")
 	private Object expand;
+	@XmlElementWrapper(name = "MAPDATA")
 	@XmlElement(name="MAP")
 	private Map<String, Object> map;
+	@XmlElementWrapper(name = "LISTDATA")
 	@XmlElement(name="LIST")
 	private List<Object> list;
 

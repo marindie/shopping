@@ -12,6 +12,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -23,6 +26,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -45,8 +50,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 public class CommonUtil {
+	public static int INDENT_FACTOR = 4;
 	private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
-
 	private static ObjectMapper mapper = new ObjectMapper().configure(Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 	
 	//===========================
@@ -247,9 +252,10 @@ public class CommonUtil {
 			Element rootElement = doc.createElement("ROOT");
 			doc.appendChild(rootElement);
 			for(int i = 0 ; i < listData.size(); i++) {
-				rootElement = createNodes(doc,rootElement, (Map<String, Object>) listData.get(i));
-			}
-			
+				Element items = doc.createElement("ITEMS");
+				items = createNodes(doc,items, (Map<String, Object>) listData.get(i));
+				rootElement.appendChild(items);
+			}			
 			transformer = TransformerFactory.newInstance().newTransformer();
 			if(CommonUtil.isNotEmpty(option.get("OMIT_XML_DECLARATION")))
 				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, option.get("OMIT_XML_DECLARATION").toString());
@@ -271,6 +277,21 @@ public class CommonUtil {
 			e.printStackTrace();
 		} 	
     	return retStr;
+    }
+    
+    public static String parseXml(Object obj) {
+    	StringWriter sw = new StringWriter();
+	    try {
+		    JAXBContext jc = JAXBContext.newInstance(obj.getClass());		    
+		    Marshaller marshaller = jc.createMarshaller();
+		    marshaller.setProperty(Marshaller.JAXB_ENCODING, "utf-8"); 
+	        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	        marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+	        marshaller.marshal(obj, sw);
+		} catch (JAXBException e) {
+		    e.printStackTrace();
+		}
+	    return sw.toString();
     }
     
     public static Element createNodes(Document doc, Element element, Map<String, Object> map) {
@@ -315,6 +336,19 @@ public class CommonUtil {
     	option.put("OMIT_XML_DECLARATION", "no");
     	option.put("INDENT", "yes");
     	return option;
+    }
+    
+    public static String convertXMLToJson(Object xml) {
+    	if(xml instanceof String) {
+    		JSONObject jsonObject = XML.toJSONObject(xml.toString());
+        	return jsonObject.toString(INDENT_FACTOR);
+    	}else if(xml instanceof List) {
+    		JSONObject jsonObject = XML.toJSONObject(parseXml((List<Map<String, Object>>) xml,getDefaultOptionList()));
+        	return jsonObject.toString(INDENT_FACTOR);
+    	}else {
+    		JSONObject jsonObject = XML.toJSONObject(parseXml(xml));
+    		return jsonObject.toString(INDENT_FACTOR);
+    	}
     }    
     
 	//===========================
