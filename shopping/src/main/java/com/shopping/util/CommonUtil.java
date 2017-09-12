@@ -1,11 +1,14 @@
 package com.shopping.util;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,11 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CommonUtil {
 	private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
-	/**
-	 * Gets the class and method name.
-	 * 현재 로직의 클래스명, 메소드명을 가져온다.
-	 * @return the class and method name
-	 */
+
 	public static String[] getClassAndMethodName() {
  
 		StackTraceElement e[] = Thread.currentThread().getStackTrace();
@@ -48,13 +47,6 @@ public class CommonUtil {
 		return nameArr;
 	}
  
-	/**
-	 * Gets the form txt.
-	 *
-	 * @param request the request
-	 *
-	 * @return the form txt
-	 */
 	public Map<String,Object> getFormTxt(HttpServletRequest request){
 		Map<String,Object> paramMaps = new HashMap<String, Object>();
  
@@ -89,34 +81,36 @@ public class CommonUtil {
 		return paramMaps;
 	}
 	
-	public List<Map<String, Object>> fromJsonToListMap(String jsonData){
-		ObjectMapper mapper = new ObjectMapper();
-		List<Map<String, Object>> data = null;
-		try {
-			data = mapper.readValue(jsonData, new TypeReference<List<Map<String, Object>>>(){});
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void printMapData(Map<String, Object> map,String start, String end) {
+		logger.info("===================== "+ start + " ===================");
+		SortedSet<String> keys = new TreeSet<String>(map.keySet());
+		for(String key : keys) {
+			logger.info("key : value : type = " + key + " : "+(isEmpty(map.get(key)) ? "" : map.get(key).toString()) + " : " +  (isEmpty(map.get(key)) ? "" : map.get(key).getClass().getName()));				
 		}
-		return data;
+		logger.info("===================== "+ end + " ===================");
 	}
 	
-	public boolean isEmpty(Object obj) {
-		if(null == obj)
-			return false;
-		else if(obj instanceof String){
-			if("".equals( obj.toString() ) ) {
-				return true;
-			}else {
-				return false;
-			}
+	public static void printMapData(List<Map<String, Object>> listMap,String start, String end) {
+		logger.info("===================== "+ start + " ===================");
+		for(int i = 0 ; i < listMap.size() ; i++) {
+			SortedSet<String> keys = new TreeSet<String>(listMap.get(i).keySet());
+			for(String key : keys) {
+				logger.info("key : value : type = " + key + " : "+(isEmpty(listMap.get(i).get(key)) ? "" : listMap.get(i).get(key).toString()) + " : " +  (isEmpty(listMap.get(i).get(key)) ? "" : listMap.get(i).get(key).getClass().getName()));
+			}			
 		}
-		return true;
+		logger.info("===================== "+ end + " ===================");
 	}
+	
+    public static boolean isEmpty(Object obj){
+        if( obj instanceof String ) return obj==null || "".equals(obj.toString().trim());
+        else if( obj instanceof List ) return obj==null || ((List)obj).isEmpty();
+        else if( obj instanceof Map ) return obj==null || ((Map)obj).isEmpty();
+        else if( obj instanceof Object[] ) return obj==null || Array.getLength(obj)==0;
+        else return obj==null;
+    }
+
+    public static boolean isNotEmpty(Object s){
+        return !isEmpty(s);
+    }
+
 }

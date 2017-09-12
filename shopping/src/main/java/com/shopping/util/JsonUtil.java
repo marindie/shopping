@@ -217,39 +217,7 @@ public class JsonUtil {
 //		}
 //		return jsonStr;
 //	}	
-	
-	public static void printMapData(Map<String, Object> jsonMap,String start, String end) {
-		logger.info("===================== "+ start + " ===================");
-		SortedSet<String> keys = new TreeSet<String>(jsonMap.keySet());
-		for(String key : keys) {
-			logger.info("key : value : type = " + key + " : "+(JsonUtil.isEmpty(jsonMap.get(key)) ? "" : jsonMap.get(key).toString()) + " : " +  (JsonUtil.isEmpty(jsonMap.get(key)) ? "" : jsonMap.get(key).getClass().getName()));				
-		}
-		logger.info("===================== "+ end + " ===================");
-	}
-	
-	public static void printMapData(List<Map<String, Object>> jsonListMap,String start, String end) {
-		logger.info("===================== "+ start + " ===================");
-		for(int i = 0 ; i < jsonListMap.size() ; i++) {
-			SortedSet<String> keys = new TreeSet<String>(jsonListMap.get(i).keySet());
-			for(String key : keys) {
-				logger.info("key : value : type = " + key + " : "+(JsonUtil.isEmpty(jsonListMap.get(i).get(key)) ? "" : jsonListMap.get(i).get(key).toString()) + " : " +  (JsonUtil.isEmpty(jsonListMap.get(i).get(key)) ? "" : jsonListMap.get(i).get(key).getClass().getName()));
-			}			
-		}
-		logger.info("===================== "+ end + " ===================");
-	}
-	
-    public static boolean isEmpty(Object obj){
-        if( obj instanceof String ) return obj==null || "".equals(obj.toString().trim());
-        else if( obj instanceof List ) return obj==null || ((List)obj).isEmpty();
-        else if( obj instanceof Map ) return obj==null || ((Map)obj).isEmpty();
-        else if( obj instanceof Object[] ) return obj==null || Array.getLength(obj)==0;
-        else return obj==null;
-    }
-
-    public static boolean isNotEmpty(Object s){
-        return !isEmpty(s);
-    }
-    
+	    
     public static List<Map<String, Object>> parseJsonGson(String json){
     	JsonParser p = new JsonParser();
         JsonElement jsonElement = p.parse(json);
