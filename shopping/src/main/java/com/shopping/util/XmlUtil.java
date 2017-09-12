@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -84,10 +85,11 @@ public class XmlUtil {
     				"}}";
             
             List<Map<String, Object>> a = JsonUtil.parseJsonGson(json1);
+            Map<String, Object> opt = getDefaultOptionList();
             System.out.println(a.toString());
             
             System.out.println(a.get(0).get("menu"));
-            System.out.println(XmlUtil.parseXml(a));
+            System.out.println(XmlUtil.parseXml(a,opt));
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +112,7 @@ public class XmlUtil {
         return node;
     }
     
-    public static String parseXml(List<Map<String, Object>> listData) {
+    public static String parseXml(List<Map<String, Object>> listData, Map<String, Object> option) {
     	Document doc;
     	Transformer transformer;
     	StringWriter writer = new StringWriter();
@@ -125,8 +127,10 @@ public class XmlUtil {
 			}
 			
 			transformer = TransformerFactory.newInstance().newTransformer();
-//          transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			if(CommonUtil.isNotEmpty(option.get("OMIT_XML_DECLARATION")))
+				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, option.get("OMIT_XML_DECLARATION").toString());
+			if(CommonUtil.isNotEmpty(option.get("INDENT")))
+				transformer.setOutputProperty(OutputKeys.INDENT, option.get("INDENT").toString());			
 			transformer.transform(new DOMSource(doc), new StreamResult(writer));
 			retStr = writer.getBuffer().toString();
 		} catch (ParserConfigurationException e) {
@@ -145,7 +149,7 @@ public class XmlUtil {
     	return retStr;
     }
     
-    private static Element createNodes(Document doc, Element element, Map<String, Object> map) {
+    public static Element createNodes(Document doc, Element element, Map<String, Object> map) {
 		SortedSet<String> keys = new TreeSet<String>(map.keySet());
 		for(String key : keys) {
 			if(map.get(key).toString().matches("^\\[.*")) {
@@ -172,9 +176,16 @@ public class XmlUtil {
     	return element;
     }
     
-    private static Node addNode(Document doc, String name, String value) {
+    public static Node addNode(Document doc, String name, String value) {
     	Element node = doc.createElement(name);
     	node.appendChild(doc.createTextNode(value));
     	return node;
+    }
+    
+    public static Map<String, Object> getDefaultOptionList() {
+    	Map<String, Object> option = new HashMap<String, Object>();
+    	option.put("OMIT_XML_DECLARATION", "no");
+    	option.put("INDENT", "yes");
+    	return option;
     }
 }
