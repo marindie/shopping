@@ -276,26 +276,31 @@ public class CommonUtil {
     public static Element createNodes(Document doc, Element element, Map<String, Object> map) {
 		SortedSet<String> keys = new TreeSet<String>(map.keySet());
 		for(String key : keys) {
-			if(map.get(key).toString().matches("^\\[.*")) {
-				Element newElement = doc.createElement(key);
-				List<Map<String, Object>> listMap = (List<Map<String, Object>>) map.get(key);				
-				for(int i = 0 ; i < listMap.size(); i++) {
-					if(CommonUtil.isNotEmpty(listMap.get(i))){
-						newElement = createNodes(doc,newElement, (Map<String, Object>) listMap.get(i));
-						element.appendChild(newElement);						
-					}
-				}				
-			}else if(map.get(key).toString().matches("^\\{.*")) {
-				Element newElement = doc.createElement(key);
-				newElement = createNodes(doc,newElement, (Map<String, Object>) map.get(key));
-				element.appendChild(newElement);
+			if(CommonUtil.isEmpty(map.get(key))) {
+				element.appendChild(addNode(doc,key,""));
 			}else {
-				if(CommonUtil.isEmpty(map.get(key))) {
-					element.appendChild(addNode(doc,key,""));
+				if(map.get(key).toString().matches("^\\[.*")) {
+					Element newElement = doc.createElement(key);
+					List<Map<String, Object>> listMap = (List<Map<String, Object>>) map.get(key);				
+					for(int i = 0 ; i < listMap.size(); i++) {
+						if(CommonUtil.isNotEmpty(listMap.get(i))){
+							newElement = createNodes(doc,newElement, (Map<String, Object>) listMap.get(i));
+							element.appendChild(newElement);						
+						}
+					}				
+				}else if(map.get(key).toString().matches("^\\{.*")) {
+					Element newElement = doc.createElement(key);
+					newElement = createNodes(doc,newElement, (Map<String, Object>) map.get(key));
+					element.appendChild(newElement);
 				}else {
-					element.appendChild(addNode(doc,key,map.get(key).toString()));
+					System.out.println("Data Found "+key);
+					if(CommonUtil.isEmpty(map.get(key))) {
+						element.appendChild(addNode(doc,key,""));
+					}else {
+						element.appendChild(addNode(doc,key,map.get(key).toString()));
+					}				
 				}				
-			}				
+			}
 		}
     	return element;
     }
