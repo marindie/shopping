@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,6 +27,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import com.shopping.xml.vo.XmlVO;
 
 public class XmlUtil {
 	
@@ -95,6 +99,32 @@ public class XmlUtil {
             Map<String, Object> opt = getDefaultOptionList();
             System.out.println(a.toString());
             System.out.println(XmlUtil.parseXml(a,opt));
+            
+            XmlVO xmlVo = new XmlVO();
+            xmlVo.setId("11");
+            xmlVo.setKey("key1");
+            
+            XmlVO xmlVo1 = new XmlVO();
+            xmlVo1.setId("22");
+            xmlVo1.setKey("key2");
+            
+            Object obj1 = xmlVo1;
+            List<Object> obj2 = new ArrayList<Object>();
+            obj2.add(obj1);
+            xmlVo.setList(obj2);
+            opt.put("XMLVO",obj1);
+            
+            XmlVO xmlVo2 = new XmlVO();
+            xmlVo2.setId("33");
+            xmlVo2.setKey("key3");
+
+            Object obj3 = xmlVo2;
+            opt.put("XMLTemplateVO",obj3);
+            obj2.add(obj3);
+            xmlVo.setExpand(obj3);
+            xmlVo.setMap(opt);
+            
+            System.out.println(XmlUtil.parseXml(xmlVo));
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,7 +204,6 @@ public class XmlUtil {
 					newElement = createNodes(doc,newElement, (Map<String, Object>) map.get(key));
 					element.appendChild(newElement);
 				}else {
-					System.out.println("Data Found "+key);
 					if(CommonUtil.isEmpty(map.get(key))) {
 						element.appendChild(addNode(doc,key,""));
 					}else {
@@ -197,5 +226,20 @@ public class XmlUtil {
     	option.put("OMIT_XML_DECLARATION", "no");
     	option.put("INDENT", "yes");
     	return option;
+    }
+    
+    public static String parseXml(Object obj) {
+    	StringWriter sw = new StringWriter();
+	    try {
+		    JAXBContext jc = JAXBContext.newInstance(obj.getClass());		    
+		    Marshaller marshaller = jc.createMarshaller();
+		    marshaller.setProperty(Marshaller.JAXB_ENCODING, "utf-8"); 
+	        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	        marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+	        marshaller.marshal(obj, sw);
+		} catch (JAXBException e) {
+		    e.printStackTrace();
+		}
+	    return sw.toString();
     }
 }
