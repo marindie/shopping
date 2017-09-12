@@ -56,39 +56,44 @@ public class XmlUtil {
  
             System.out.println("\nXML DOM Created Successfully..");
             
-            String json1 = "{\"menu\": {\r\n" + 
-    				"    \"header\": \"SVG Viewer\",\r\n" + 
-    				"    \"items\": [\r\n" + 
-    				"        {\"id\": \"Open\"},\r\n" + 
-    				"        {\"id\": \"OpenNew\", \"label\": \"Open New\"},\r\n" + 
-    				"        null,\r\n" + 
-    				"        {\"id\": \"ZoomIn\", \"label\": \"Zoom In\"},\r\n" + 
-    				"        {\"id\": \"ZoomOut\", \"label\": \"Zoom Out\"},\r\n" + 
-    				"        {\"id\": \"OriginalView\", \"label\": \"Original View\"},\r\n" + 
-    				"        null,\r\n" + 
-    				"        {\"id\": \"Quality\"},\r\n" + 
-    				"        {\"id\": \"Pause\"},\r\n" + 
-    				"        {\"id\": \"Mute\"},\r\n" + 
-    				"        null,\r\n" + 
-    				"        {\"id\": \"Find\", \"label\": \"Find...\"},\r\n" + 
-    				"        {\"id\": \"FindAgain\", \"label\": \"Find Again\"},\r\n" + 
-    				"        {\"id\": \"Copy\"},\r\n" + 
-    				"        {\"id\": \"CopyAgain\", \"label\": \"Copy Again\"},\r\n" + 
-    				"        {\"id\": \"CopySVG\", \"label\": \"Copy SVG\"},\r\n" + 
-    				"        {\"id\": \"ViewSVG\", \"label\": \"View SVG\"},\r\n" + 
-    				"        {\"id\": \"ViewSource\", \"label\": \"View Source\"},\r\n" + 
-    				"        {\"id\": \"SaveAs\", \"label\": \"Save As\"},\r\n" + 
-    				"        null,\r\n" + 
-    				"        {\"id\": \"Help\"},\r\n" + 
-    				"        {\"id\": \"About\", \"label\": \"About Adobe CVG Viewer...\"}\r\n" + 
-    				"    ]\r\n" + 
-    				"}}";
+    		String json1 = "[\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"red\",\r\n" + 
+    				"		value: \"#f00\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"green\",\r\n" + 
+    				"		value: \"#0f0\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"blue\",\r\n" + 
+    				"		value: \"#00f\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"cyan\",\r\n" + 
+    				"		value: \"#0ff\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"magenta\",\r\n" + 
+    				"		value: \"#f0f\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"yellow\",\r\n" + 
+    				"		value: \"#ff0\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"black\",\r\n" + 
+    				"		value: \"#000\"\r\n" + 
+    				"	},\r\n" + 
+    				"	{\r\n" + 
+    				"		color: \"\",\r\n" + 
+    				"		value: null\r\n" + 
+    				"	}\r\n" + 
+    				"]";
             
-            List<Map<String, Object>> a = JsonUtil.parseJsonGson(json1);
+            List<Map<String, Object>> a = JsonUtil.parseJsonGson(json1);            
             Map<String, Object> opt = getDefaultOptionList();
             System.out.println(a.toString());
-            
-            System.out.println(a.get(0).get("menu"));
             System.out.println(XmlUtil.parseXml(a,opt));
  
         } catch (Exception e) {
@@ -152,26 +157,31 @@ public class XmlUtil {
     public static Element createNodes(Document doc, Element element, Map<String, Object> map) {
 		SortedSet<String> keys = new TreeSet<String>(map.keySet());
 		for(String key : keys) {
-			if(map.get(key).toString().matches("^\\[.*")) {
-				Element newElement = doc.createElement(key);
-				List<Map<String, Object>> listMap = (List<Map<String, Object>>) map.get(key);				
-				for(int i = 0 ; i < listMap.size(); i++) {
-					if(CommonUtil.isNotEmpty(listMap.get(i))){
-						newElement = createNodes(doc,newElement, (Map<String, Object>) listMap.get(i));
-						element.appendChild(newElement);						
-					}
-				}				
-			}else if(map.get(key).toString().matches("^\\{.*")) {
-				Element newElement = doc.createElement(key);
-				newElement = createNodes(doc,newElement, (Map<String, Object>) map.get(key));
-				element.appendChild(newElement);
+			if(CommonUtil.isEmpty(map.get(key))) {
+				element.appendChild(addNode(doc,key,""));
 			}else {
-				if(CommonUtil.isEmpty(map.get(key))) {
-					element.appendChild(addNode(doc,key,""));
+				if(map.get(key).toString().matches("^\\[.*")) {
+					Element newElement = doc.createElement(key);
+					List<Map<String, Object>> listMap = (List<Map<String, Object>>) map.get(key);				
+					for(int i = 0 ; i < listMap.size(); i++) {
+						if(CommonUtil.isNotEmpty(listMap.get(i))){
+							newElement = createNodes(doc,newElement, (Map<String, Object>) listMap.get(i));
+							element.appendChild(newElement);						
+						}
+					}				
+				}else if(map.get(key).toString().matches("^\\{.*")) {
+					Element newElement = doc.createElement(key);
+					newElement = createNodes(doc,newElement, (Map<String, Object>) map.get(key));
+					element.appendChild(newElement);
 				}else {
-					element.appendChild(addNode(doc,key,map.get(key).toString()));
+					System.out.println("Data Found "+key);
+					if(CommonUtil.isEmpty(map.get(key))) {
+						element.appendChild(addNode(doc,key,""));
+					}else {
+						element.appendChild(addNode(doc,key,map.get(key).toString()));
+					}				
 				}				
-			}				
+			}
 		}
     	return element;
     }

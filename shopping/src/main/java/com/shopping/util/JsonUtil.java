@@ -131,19 +131,7 @@ public class JsonUtil {
 	}
 	
 	public static String convertJsonToXml(String json) {
-		String xml = "";
-//		XmlFactory factory = new XmlFactory(new WstxInputFactory(), new WstxOutputFactory());
-		ObjectMapper xmlMapper = new ObjectMapper();
-	    try {
-	    	xml = xmlMapper.writeValueAsString(parseJsonJackson(json));
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return xml;
+		return XmlUtil.parseXml(parseJsonGson(json), XmlUtil.getDefaultOptionList());
 	}
 	
 	public static String convertJsonToXml(List<Map<String, Object>> jsonList) {
@@ -347,8 +335,9 @@ public class JsonUtil {
 //		List<Map<String, Object>> res = JsonUtil.parseJsonJackson(json1);
 //		System.out.println(res.toString());
 //		System.out.println(JsonUtil.toString(res));
-		List<Map<String, Object>> res = JsonUtil.parseJsonGson(json2);
-		System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		System.out.println(convertJsonToXml(jsonArray));
+//		List<Map<String, Object>> res = JsonUtil.parseJsonGson(json2);
+//		System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		
 //		Map<String, Object> res1 = (Map<String, Object>) res.get("menu");
 //		System.out.println(res1.toString());
