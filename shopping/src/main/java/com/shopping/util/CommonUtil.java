@@ -380,7 +380,6 @@ public class CommonUtil {
  
 	public Map<String,Object> getFormTxt(HttpServletRequest request){
 		Map<String,Object> paramMaps = new HashMap<String, Object>();
- 
 		Enumeration top_ename = request.getParameterNames();
 		String paramName = "";
 		String paramValue = "";
