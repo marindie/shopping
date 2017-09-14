@@ -1,6 +1,14 @@
 package com.shopping.main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -81,5 +89,51 @@ public class TestSampleController {
 		}
 		
 		return "SuccessJson";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/test/url")
+	public String urlSample(@RequestBody String data) {
+		logger.info("url start");
+		// 연결
+		try {
+
+			URL url = new URL("http://localhost:8080/main/test/ajaxPostFormSample");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST"); // 보내는 타입
+			conn.setRequestProperty("Accept-Language", "ko-kr,ko;q=0.8,en-us;q=0.5,en;q=0.3");
+	
+			// 데이터
+			String param = "{\"title\": \"asdasd\", \"body\" : \"ddddddddd\"}";
+	
+			// 전송
+			OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+			osw.write(param);
+			osw.flush();
+			// 응답
+			BufferedReader br = null;
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+			String line = null;
+			while ((line = br.readLine()) != null) {
+			logger.info(line);
+			}
+
+			// 닫기
+			osw.close();
+			br.close();
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return "SuccessUrl";
 	}
 }

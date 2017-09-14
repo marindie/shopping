@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<script type="text/javascript" src="<c:url value="/resources/jquery-3.2.1.min.js" />"></script> 
+<script type="text/javascript" src="<c:url value="/resources/jquery-3.2.1.min.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/common.js" />"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -133,7 +133,22 @@ $(document).ready(function(){
 	var xmlString = serializer.serializeToString(xmlDoc);
 	console.log("xml--------->" + xmlString);
 	return xmlString; 
-	}	
+	}
+	
+	$("#callUrl").click(function(){
+		$.ajax({
+			type : "POST",
+			url : $("#url").val(),
+			data : $("#url").val(),
+			contentType : "application/json;charset=utf-8",
+			success : function(data){
+				$("#urlResponse").text(data);
+			},
+			error : function(error){
+				alert(error);
+			}
+		});
+	});
 });
 </script>
 <title>Insert title here</title>
@@ -181,5 +196,10 @@ this is test
 	</form>
 </div>
 <span id="ajaxJsonResponse">result</span>
+<div>
+	URL <input id="url" type="text"/>
+	<input type="button" id="callUrl"/ value="callUrl">
+	<span id="urlResponse">RESPONSE</span> 
+</div>
 </body>
 </html>
