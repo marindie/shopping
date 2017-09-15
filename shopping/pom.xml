@@ -244,6 +244,7 @@
 
 	</dependencies>
     <build>
+    	<finalName>main</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -279,6 +280,15 @@
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<warName>${project.artifactId}</warName>
+					<outputDirectory>E:\tomcat\webapps</outputDirectory>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 </project>
