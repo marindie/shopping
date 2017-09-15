@@ -81,13 +81,10 @@ $(document).ready(function(){
 	
 	//Ajax Form Json Test
 	$("#ajaxPostFormJson").click(function(){
-		
 		var regex = /([^=#]+)=([^&#]*)&{0,1}/g,
 	    url = $("#jsonForm").serialize(),
 	    params = {},
 	    match;
-		
-		
 		
 		while(match = regex.exec(url)) {
 			params[match[1]] = match[2];
@@ -129,10 +126,10 @@ $(document).ready(function(){
 		    node.innerHTML = match[2];
 		    elements[0].appendChild(node);
 		}
-	var serializer = new XMLSerializer();
-	var xmlString = serializer.serializeToString(xmlDoc);
-	console.log("xml--------->" + xmlString);
-	return xmlString; 
+		var serializer = new XMLSerializer();
+		var xmlString = serializer.serializeToString(xmlDoc);
+		console.log("xml--------->" + xmlString);
+		return xmlString; 
 	}
 	
 	$("#callUrl").click(function(){
@@ -154,7 +151,6 @@ $(document).ready(function(){
 <title>Insert title here</title>
 </head>
 <body>
-this is test
 <table>
 	<c:forEach items="${listData}" var="list">
 		<c:forEach items="${list }" var="map">
@@ -169,23 +165,23 @@ this is test
 		<div>
 			AjaxSampleText1 = <input type="text" name="textData1" />
 			AjaxSampleText2 = <input type="text" name="textData2" />
-		</div>
-		<div>
 			<input type="button" id="formSendBtn" value="AjaxFormPostSample"/>
 		</div>
-	</form>
+	</form>	
+</div>
+<div>
 	<span>Ajax Sample</span><button id="ajaxStringSample">Send</button><input id="ajaxStringResponse" />
 </div>
-
 <div>
 	<form id="xmlForm" action="" method="post">
 		xmlData1 <input type="text" name="text1" />
 		xmlData2 <input type="text" name="text2" />
 		<textArea name="textArea1">asdfasdf</textArea>
 		<input type="button" id="ajaxXmlSample" value="ajaxXmlSample"/>
-	</form>
+	</form> 
+	<span id="ajaxXmlResponse">result</span>
 </div>
-<span id="ajaxXmlResponse">result</span>
+
 
 <div>
 	<form id="jsonForm" action="" method="post">
@@ -194,13 +190,22 @@ this is test
 		<textArea name="textArea1">simpl json data</textArea>
 		<input type="button" id="ajaxPostFormJson" value="ajaxPostFormJson"/>
 	</form>
+	<span id="ajaxJsonResponse">result</span>
 </div>
-<span id="ajaxJsonResponse">result</span>
+
 <div>
-	URL <input id="url" type="text"/><br/>
+	URL <input id="url" type="text"/>
 	PARAM <input id="param" type="text"/>
 	<input type="button" id="callUrl"/ value="callUrl">
 	<span id="urlResponse">RESPONSE</span> 
+</div>
+
+<div>
+	<form action="test/formtest" method="get">
+	    name=value1 <input type="text" name="param" />
+	    name=value1 <input type="text" name="param" />
+	    <input type="submit" value="submit" />
+	</form>
 </div>
 </body>
 </html>
