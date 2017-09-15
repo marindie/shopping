@@ -244,7 +244,7 @@
 
 	</dependencies>
     <build>
-    	<finalName>main</finalName>
+    	<!-- <finalName>main</finalName> -->
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
