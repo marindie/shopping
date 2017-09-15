@@ -139,7 +139,7 @@ $(document).ready(function(){
 		$.ajax({
 			type : "POST",
 			url : $("#url").val(),
-			data : $("#url").val(),
+			data : $("#param").val(),
 			contentType : "application/json;charset=utf-8",
 			success : function(data){
 				$("#urlResponse").text(data);
@@ -197,7 +197,8 @@ this is test
 </div>
 <span id="ajaxJsonResponse">result</span>
 <div>
-	URL <input id="url" type="text"/>
+	URL <input id="url" type="text"/><br/>
+	PARAM <input id="param" type="text"/>
 	<input type="button" id="callUrl"/ value="callUrl">
 	<span id="urlResponse">RESPONSE</span> 
 </div>
