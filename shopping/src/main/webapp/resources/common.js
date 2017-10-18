@@ -5,6 +5,10 @@ var wony;
 if(!wony) wony = {};
 //if(!wony.util) wony.util = {};
 //wony.util.module = {};
+function foo(salutation, three, two, one) {
+    alert(salutation + " " + this.name + " - " + three + " " + two + " " + one);
+}
+
 (function(window){
 	
 	Json = {
@@ -79,6 +83,14 @@ if(!wony) wony = {};
 				}
 				return params;				
 			}
+	}
+	
+	Thing = function(name) {
+	    this.name = name;
+	}
+	Thing.prototype.doSomething = function(callback) {
+	    // Call our callback, but using our own instance as the context
+	    callback.apply(this, ['Hi', 3, 2, 1]);
 	}
 	
 	window.wony = wony;

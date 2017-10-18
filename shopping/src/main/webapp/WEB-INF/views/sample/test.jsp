@@ -81,17 +81,11 @@ $(document).ready(function(){
 	
 	//Ajax Form Json Test
 	$("#ajaxPostFormJson").click(function(){
-//		var regex = /([^=#]+)=([^&#]*)&{0,1}/g,
+		var t = new Thing('Joe');
+		t.doSomething(foo);  // Alerts "Hi Joe - 3 2 1" via `foo`
+
 	    var url = $("#jsonForm").serialize();
-//	    params = {},
-//	    match;
-//		
-//		while(match = regex.exec(url)) {
-//			params[match[1]] = match[2];
-//		}
-	
-		//var jsonData = Json.toObject(url);
-		var jsonData = wony.toObject(url);
+		var jsonData = Json.toObject(url);
 		jsonData = JSON.stringify(jsonData);
 		jsonData = jsonData.replace(/%20/g," ");
 		var arrayJson = [];
