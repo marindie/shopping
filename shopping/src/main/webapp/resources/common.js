@@ -5,8 +5,21 @@ var wony;
 if(!wony) wony = {};
 //if(!wony.util) wony.util = {};
 //wony.util.module = {};
-function foo(salutation, three, two, one) {
+function foo1(salutation, three, two, one) {
     alert(salutation + " " + this.name + " - " + three + " " + two + " " + one);
+}
+
+function foo2(salutation) {
+    alert(salutation + " " + this.name);
+}
+
+function foo3() {
+    alert(this.name);
+}
+
+function foo4(a, b, c) {
+    // I'm the callback
+    alert(a + " " + b + " " + c);
 }
 
 (function(window){
@@ -87,10 +100,24 @@ function foo(salutation, three, two, one) {
 	
 	Thing = function(name) {
 	    this.name = name;
-	}
-	Thing.prototype.doSomething = function(callback) {
-	    // Call our callback, but using our own instance as the context
-	    callback.apply(this, ['Hi', 3, 2, 1]);
+	};	
+	Thing.prototype = {
+		doSomething1 : function(callback) {
+		    // Call our callback, but using our own instance as the context
+		    callback.apply(this, ['Hi', 3, 2, 1]);
+		},
+		doSomething2 : function(callback, salutation) {
+		    // Call our callback, but using our own instance as the context
+		    callback.call(this, salutation);
+		},
+		doSomething3 : function(callback) {
+		    // Call our callback, but using our own instance as the context
+		    callback.call(this);
+		},
+		doSomething4 : function(callback) {
+		    // Call the callback
+		    callback('stuff', 'goes', 'here');
+		}
 	}
 	
 	window.wony = wony;

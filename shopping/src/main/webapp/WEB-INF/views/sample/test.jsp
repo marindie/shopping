@@ -82,7 +82,10 @@ $(document).ready(function(){
 	//Ajax Form Json Test
 	$("#ajaxPostFormJson").click(function(){
 		var t = new Thing('Joe');
-		t.doSomething(foo);  // Alerts "Hi Joe - 3 2 1" via `foo`
+		t.doSomething1(foo1);  // Alerts "Hi Joe - 3 2 1" via `foo`
+		t.doSomething2(foo2,"Hi");  // Alerts "Hi Joe - 3 2 1" via `foo`
+		t.doSomething3(foo3);  // Alerts "Hi Joe - 3 2 1" via `foo`
+		t.doSomething4(foo4);  // Alerts "Hi Joe - 3 2 1" via `foo`
 
 	    var url = $("#jsonForm").serialize();
 		var jsonData = Json.toObject(url);
