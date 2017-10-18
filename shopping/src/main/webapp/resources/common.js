@@ -3,10 +3,27 @@
  */
 var wony;
 if(!wony) wony = {};
-if(!wony.util) wony.util = {};
-wony.util.module = {};
+//if(!wony.util) wony.util = {};
+//wony.util.module = {};
 (function(window){
-
+	
+	Json = {
+			toObject : function(formData){
+				return serializeToObject(formData);
+			}
+	};
+	
+	function serializeToObject(formData){
+		var regex = /([^=#]+)=([^&#]*)&{0,1}/g,
+	    params = new Object(),
+	    match = new Array();
+		
+		while(match = regex.exec(formData)) {
+			params[match[1]] = match[2];
+		}
+		return params;
+	}
+	
 	Map = function(){
 		this.map = new Object();
 	};
@@ -51,18 +68,18 @@ wony.util.module = {};
 					count++;
 				}
 				return count;
+			},			
+			serializeToObject : function(formData){
+				var regex = /([^=#]+)=([^&#]*)&{0,1}/g,
+			    params = new Object(),
+			    match;
+				
+				while(match = regex.exec(formData)) {
+					params[match[1]] = match[2];
+				}
+				return params;				
 			}
 	}
 	
-	serializeToObject = function(formData){
-		var regex = /[?&]([^=#]+)=([^&#]*)/g,
-	    params = new Object(),
-	    match;
-		
-		while(match = regex.exec(formData)) {
-			params.match[1] = match[2];
-		}
-		return params;
-	};
-	
+	window.wony = wony;
 })(window);
