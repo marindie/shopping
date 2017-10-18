@@ -1,0 +1,4 @@
+alias sqllog='tail -F /software/was/tomcat7/server/TBPPTLD2/logs/TBPPTLD2.out | awk --posix -f sqllog.awk'
+alias wonyps='ps -ef | grep software'
+export date=`date +"%Y%m%d"`
+alias weblog='tail -F /software/web/apache/logs/ssl_request_log."$date"'

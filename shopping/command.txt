@@ -1,0 +1,146 @@
+git rm --cached README.md
+git rm --cached bitbucket_c9_heroku/.gitignore
+git rm --cached bitbucket_c9_heroku/app/assets/javascripts/articles.coffee
+git rm --cached bitbucket_c9_heroku/app/assets/stylesheets/articles.scss
+git rm --cached bitbucket_c9_heroku/app/helpers/articles_helper.rb
+git rm --cached bitbucket_c9_heroku/db/migrate/20170921055005_create_articles.rb
+git rm --cached bitbucket_c9_heroku/db/schema.rb
+git rm --cached bitbucket_c9_heroku/test/controllers/articles_controller_test.rb
+git rm --cached bitbucket_c9_heroku/test/fixtures/articles.yml
+git rm --cached bitbucket_c9_heroku/test/models/article_test.rb
+
+=============================
+heroku 명령어 모음
+https://devcenter.heroku.com/articles/getting-started-with-rails5#visit-your-application 내용 정리한것임
+
+-- heroku 연결
+1. heroku login
+
+-- heroku 에 DB 정보 변경
+1. app root directory 에 Gemfile 에 gem 'sqlite3' 을 원하는 db로 변경 Ex) gem 'pg'
+2. dependency re-install 하기 위해 bundle install
+3. config/database.yml 에 관련된 정보로 update 쳐야함. 검색하면 샘플 나옴.
+4. 해당 db를 재구동 시켜주는게 좋은거 같음. sudo service postgresql restart
+5. 계정 설정은 해보지 않아서 모름.
+
+-- app 생성
+1. heroku create (git과 같은 폴더 위치에 있는것이 좋다. 아니면 rails app 폴더가 있는 위치 ex. workspace 에 app 이 있다면, workspace 에서 실행)
+
+-- heroku remote 에 생성되어 있는지 확인
+1. git config --list | grep heroku
+
+-- heroku 에 Postgresql 가 연결되어 있는지 확인
+1. heroku addons
+
+-- heroku 에 push 
+1. git push heroku master
+
+-- container 확인? 생성? 잘 모르겠지만 필요함
+1. heroku ps:scale web=1
+
+-- container 기동 여부 확인
+1. heroku ps
+
+-- visit app
+1. heroku open
+
+-- heroku 에 Postgresql 연결
+1. heroku addons:create heroku-postgresql:<PLAN_NAME>
+ex) heroku addons:create heroku-postgresql:hobby-dev
+
+-- heroku 에 올라가 있는 Deploy DB를 Local로 땡겨옴. (기존에 이름이 존재하면 문제 생김)
+1. heroku pg:pull HEROKU_POSTGRESQL_MAGENTA mylocaldb --app sushi
+2. PGUSER=postgres PGPASSWORD=password heroku pg:pull HEROKU_POSTGRESQL_MAGENTA mylocaldb --app sushi
+
+-- Local DB 를 heroku 에 올림 PGUSER=postgres PGPASSWORD=password 사용가능
+1. heroku pg:push mylocaldb HEROKU_POSTGRESQL_MAGENTA --app sushi
+2. heroku pg:push myapp_development DATABASE_URL --app calm-garden-65372
+
+-- DB 상태 확인 명령어
+1. watch heroku pg:info
+
+-- PostgresSQL DB 정보 출력 명령어
+1. heroku pg:info
+
+-- web process Procfile 로 설정하기
+1. vi Procfile (ROOT 에서 생성하면 됨 ex. app/* 이면 app)
+2. write web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
+3. to use procfile locally, type heroku locally
+
+-- environment 설정
+1. .env 파일 생성
+2. key=value 형태로 작성
+3. type heroku local
+
+-- environment 정보 보는방법
+1. rake about
+2. heroku config
+
+-- view currently running queries
+1. heroku pg:ps
+
+-- kill queries
+1. heroku pg:kill PID
+
+-- db reset
+1. heroku pg:reset DATABASE
+
+-- link with existing app
+heroku git:remote -a project
+
+-- migrate heroku db
+heroku run rake db:migrate
+heroku run rake --trace db:migrate VERSION=20081118092504
+
+=============================
+
+=============================
+rails 명령어
+rake db:setup (database.yml 파일을 바탕으로 DB 생성 해줌)
+rails server --environment production 
+rails db:migrate RAILS_ENV=production 
+rails db:migrate:reset
+rails generate controller welcome
+rails generate controller welcome new
+rails generate scaffold User name:string email:string (RESTFul 전체 내용 생성, DB 까지해줌)
+rails generate model User name:string email:string (model 생성)
+rails generate scaffold Micropost content:text user_id:integer
+rails server or rails s
+rails routes
+rails console
+rails test
+rails generate migration add_index_to_users_email
+rails generate migration add_password_digest_to_users password_digest:string
+rails generate controller PasswordResets new edit --no-test-framework
+
+rake db:setup Encoding error
+
+Ok, below steps resolved the problem:
+First, we need to drop template1. Templates can’t be dropped, so we first modify it so t’s an ordinary database:
+UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+Now we can drop it:
+DROP DATABASE template1;
+
+Now its time to create database from template0, with a new default encoding:
+CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UNICODE';
+Now modify template1 so it’s actually a template:
+UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template1';
+
+Now switch to template1 and VACUUM FREEZE the template:
+\c template1
+VACUUM FREEZE;
+Problem should be resolved
+
+database.yml 에 
+template: template0 한줄 추가
+
+
+=============================
+postgres 명령어
+\du List of roles
+\l List of databases
+\q quit
+sudo -u postgres psql
+sudo service postgresql (start/stop/status)
+service postgresql status
+
