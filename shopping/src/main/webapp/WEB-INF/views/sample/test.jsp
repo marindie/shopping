@@ -7,8 +7,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<script type="text/javascript" src="<c:url value="/resources/jquery-3.2.1.min.js" />"></script>
-<script type="text/javascript" src="<c:url value="/resources/common.js" />"></script>
+<!-- <script type="text/javascript" src="<c:url value="/resources/jquery-3.2.1.min.js" />"></script> -->
+<!-- <script type="text/javascript" src="<c:url value="/resources/common.js" />"></script> -->
+<script type="text/javascript" src="/main/resources/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/main/resources/common.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//Simple Map Sample

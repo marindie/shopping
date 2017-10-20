@@ -21,6 +21,7 @@
 		<input type="submit" value="submit" />
 	</form:form>
 	<a href="/main/test">Go to Test</a>
+	<a href="/main/article">Go to Upload</a>
 </div>
 
 <P>  The time on the server is ${serverTime}. </P>
