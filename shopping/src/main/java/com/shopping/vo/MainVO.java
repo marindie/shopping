@@ -1,18 +1,18 @@
 package com.shopping.vo;
 
 public class MainVO {
-	private Integer id;
+	private String id;
 	private String pwd;
 	/**
 	 * @return the id
 	 */
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	/**
